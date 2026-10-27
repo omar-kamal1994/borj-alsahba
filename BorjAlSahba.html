@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>برج الصحبة - إدارة العمارة السكنية</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1e293b', // Slate 800
+                        secondary: '#0f172a', // Slate 900
+                        accent: '#d97706', // Amber 600
+                        accentLight: '#f59e0b', // Amber 500
+                        lightBg: '#f8fafc',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Cairo for Arabic -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #0f172a;
+        }
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 flex justify-center items-center min-h-screen p-0 sm:p-4">
+
+    <!-- Mobile Frame Container -->
+    <div id="app-container" class="w-full max-w-md bg-slate-900 sm:rounded-3xl shadow-2xl overflow-hidden flex flex-col h-screen sm:h-[900px] border border-slate-800 relative">
+        
+        <!-- TOP APP HEADER -->
+        <header class="bg-slate-900 border-b border-slate-800 px-4 py-3 flex justify-between items-center z-20 shrink-0">
+            <div class="flex items-center space-x-3 space-x-reverse">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-amber-700 flex items-center justify-center text-white font-bold shadow-md shadow-amber-900/40">
+                    <i class="fa-solid fa-building text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-base leading-tight text-white">برج الصحبة</h1>
+                    <p class="text-xs text-amber-400 font-medium" id="header-user-badge">زائر</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-2 space-x-reverse">
+                <!-- Notifications Bell -->
+                <button onclick="openModal('notifications-modal')" class="relative p-2 text-slate-300 hover:text-white transition rounded-full hover:bg-slate-800">
+                    <i class="fa-solid fa-bell text-lg"></i>
+                    <span id="unread-badge" class="absolute top-1 right-1 w-2 h-2 bg-amber-500 rounded-full animate-pulse"></span>
+                </button>
+                <!-- Login / Logout / Profile Button -->
+                <button onclick="openAuthModal()" id="auth-header-btn" class="bg-amber-600 hover:bg-amber-500 text-xs text-white font-semibold px-3 py-1.5 rounded-xl transition flex items-center space-x-1 space-x-reverse shadow">
+                    <i class="fa-solid fa-right-to-bracket ml-1"></i>
+                    <span id="auth-btn-text">دخول</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- MAIN SCROLLABLE CONTENT AREA -->
+        <main id="main-content" class="flex-1 overflow-y-auto pb-24 relative bg-slate-900">
+            <!-- Dynamic pages injected here -->
+        </main>
+
+        <!-- BOTTOM NAVIGATION BAR -->
+        <nav class="absolute bottom-0 left-0 right-0 bg-slate-900/95 backdrop-blur-md border-t border-slate-800 px-2 py-2 flex justify-around items-center z-30 shadow-lg">
+            <button onclick="switchTab('home')" class="nav-btn flex flex-col items-center py-1 px-2.5 rounded-xl text-slate-400 hover:text-amber-400 transition" data-tab="home">
+                <i class="fa-solid fa-house text-lg mb-1"></i>
+                <span class="text-[10px] font-medium">الرئيسية</span>
+            </button>
+            <button onclick="switchTab('apartments')" class="nav-btn flex flex-col items-center py-1 px-2.5 rounded-xl text-slate-400 hover:text-amber-400 transition" data-tab="apartments">
+                <i class="fa-solid fa-people-roof text-lg mb-1"></i>
+                <span class="text-[10px] font-medium">الشقق</span>
+            </button>
+            <button onclick="switchTab('announcements')" class="nav-btn flex flex-col items-center py-1 px-2.5 rounded-xl text-slate-400 hover:text-amber-400 transition" data-tab="announcements">
+                <i class="fa-solid fa-bullhorn text-lg mb-1"></i>
+                <span class="text-[10px] font-medium">الإعلانات</span>
+            </button>
+            <button onclick="switchTab('dues')" class="nav-btn flex flex-col items-center py-1 px-2.5 rounded-xl text-slate-400 hover:text-amber-400 transition" data-tab="dues">
+                <i class="fa-solid fa-file-invoice-dollar text-lg mb-1"></i>
+                <span class="text-[10px] font-medium">الاشتراكات</span>
+            </button>
+            <button onclick="switchTab('finances')" class="nav-btn flex flex-col items-center py-1 px-2.5 rounded-xl text-slate-400 hover:text-amber-400 transition" data-tab="finances">
+                <i class="fa-solid fa-wallet text-lg mb-1"></i>
+                <span class="text-[10px] font-medium">المالية</span>
+            </button>
+            <button onclick="switchTab('staff')" class="nav-btn flex flex-col items-center py-1 px-2.5 rounded-xl text-slate-400 hover:text-amber-400 transition" data-tab="staff">
+                <i class="fa-solid fa-user-tie text-lg mb-1"></i>
+                <span class="text-[10px] font-medium">البواب</span>
+            </button>
+        </nav>
+
+    </div>
+
+    <!-- MODALS CONTAINER -->
+    <!-- Login Modal -->
+    <div id="auth-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-sm p-5 shadow-2xl">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-right-to-bracket text-amber-500"></i> تسجيل دخول الشقة
+                </h3>
+                <button onclick="closeModal('auth-modal')" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <p class="text-xs text-slate-400 mb-4">أدخل رقم الشقة تماماً كما هو مسجل (مثال: شقة 101) ورقم الهاتف:</p>
+            <form onsubmit="handleLogin(event)" class="space-y-3">
+                <div>
+                    <label class="text-[11px] text-slate-400 mb-1 block">رقم الشقة (اسم المستخدم)</label>
+                    <input type="text" id="login-apt" placeholder="شقة 101" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500">
+                </div>
+                <div>
+                    <label class="text-[11px] text-slate-400 mb-1 block">رقم الهاتف (كلمة المرور للمالك)</label>
+                    <input type="password" id="login-phone" placeholder="01012345678" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500">
+                </div>
+                <button type="submit" class="w-full py-2.5 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-xl text-xs transition shadow-md">دخول للمالك</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Unpaid Residents Modal (Interactive link modal) -->
+    <div id="unpaid-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md p-5 shadow-2xl max-h-[85vh] flex flex-col">
+            <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-file-invoice text-red-400"></i> تفاصيل الشقق المتأخرة لشهر <span id="modal-unpaid-month"></span>
+                </h3>
+                <button onclick="closeModal('unpaid-modal')" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div id="unpaid-modal-list" class="flex-1 overflow-y-auto space-y-2.5 pr-1">
+                <!-- Injected dynamically -->
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-800 flex justify-end">
+                <button onclick="closeModal('unpaid-modal')" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs font-bold transition">إغلاق</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notifications Modal -->
+    <div id="notifications-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md p-5 shadow-2xl max-h-[80vh] flex flex-col">
+            <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-bell text-amber-500"></i> الإشعارات والتنبيهات
+                </h3>
+                <button onclick="closeModal('notifications-modal')" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div id="notifications-list" class="flex-1 overflow-y-auto space-y-3 pr-1"></div>
+        </div>
+    </div>
+
+    <!-- Custom Alert Modal -->
+    <div id="custom-alert-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-xs p-5 shadow-2xl text-center">
+            <div id="alert-icon" class="w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center text-xl mx-auto mb-3">
+                <i class="fa-solid fa-circle-exclamation"></i>
+            </div>
+            <h4 id="alert-title" class="font-bold text-white text-base mb-1">تنبيه</h4>
+            <p id="alert-message" class="text-xs text-slate-300 mb-4 leading-relaxed"></p>
+            <button onclick="closeModal('custom-alert-modal')" class="w-full py-2.5 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-xl text-xs transition">حسناً</button>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC & STATE -->
+    <script>
+        const DEFAULT_DATA = {
+            currentUser: null, // { number, owner, role: 'admin'|'resident', phone }
+            activeTab: 'home',
+            announcements: [
+                { id: 1, title: 'صيانة دورية للمصعد', text: 'سيتم توقف المصعد يوم الخميس القادم من الساعة 10 صباحاً حتى 2 ظهراً.', date: '2026-06-10', urgent: true, approved: true, author: 'الإدارة' },
+                { id: 2, title: 'موعد اجتماع اتحاد الشقاق', text: 'دعوة لجميع الملاك لحضور الاجتماع النصف سنوي في الطابق الأرضي.', date: '2026-06-08', urgent: false, approved: true, author: 'الإدارة' }
+            ],
+            pendingAnnouncements: [
+                { id: 101, title: 'بيع أثاث منزلي بحالة ممتازة', text: 'مكتب وجلوس للبيع بسبب السفر.', date: '2026-06-11', author: 'شقة 102', image: 'https://placehold.co/400x200/1e293b/f59e0b?text=Furniture' }
+            ],
+            apartments: [
+                { id: 1, number: 'شقة 101', owner: 'أحمد محمود إبراهيم', phone: '01012345678', car: 'ملاكي القاهرة - أ ب ج 1234', count: 1, role: 'admin', hasTenant: false, tenantName: '', tenantPhone: '' },
+                { id: 2, number: 'شقة 102', owner: 'محمد علي حسن', phone: '01198765432', car: 'بدون سيارة', count: 1, role: 'resident', hasTenant: true, tenantName: 'إبراهيم السيد', tenantPhone: '01211112222' },
+                { id: 3, number: 'شقة 201', owner: 'مهندس سامح عبد الله', phone: '01234567890', car: 'دبابة الإسكندرية', count: 1, role: 'admin', hasTenant: false, tenantName: '', tenantPhone: '' },
+                { id: 4, number: 'شقة 301', owner: 'دكتورة ميرفت فؤاد', phone: '01555443322', car: 'ملاكي الجيزة', count: 1, role: 'resident', hasTenant: false, tenantName: '', tenantPhone: '' },
+                { id: 5, number: 'محل تجاري أرضي 1', owner: 'الحاج جابر الصياد', phone: '01000000001', car: 'لا ينطبق', count: 1, role: 'resident', hasTenant: false, tenantName: '', tenantPhone: '' }
+            ],
+            duesSettings: {
+                monthlyAmount: 300 // default monthly dues per unit
+            },
+            dues: {
+                '2026-06': {
+                    'شقة 101': 'paid',
+                    'شقة 102': 'pending',
+                    'شقة 201': 'paid',
+                    'شقة 301': 'overdue',
+                    'محل تجاري أرضي 1': 'paid'
+                }
+            },
+            currentMonth: '2026-06',
+            emergencyAssessments: [
+                { id: 1, title: 'إصلاح طلمبة المياه الرئيسية', amountPerUnit: 150, date: '2026-06-05', status: { 'شقة 101': 'paid', 'شقة 102': 'pending', 'شقة 201': 'paid', 'شقة 301': 'pending', 'محل تجاري أرضي 1': 'paid' } }
+            ],
+            expenses: [
+                { id: 1, band: 'صيانة المصعد', amount: 800, date: '2026-06-02', desc: 'تغيير زيت وبلي باب الطوارئ' },
+                { id: 2, band: 'كهرباء سلم', amount: 350, date: '2026-06-05', desc: 'فاتورة الكهرباء الشهرية' },
+                { id: 3, band: 'نظافة', amount: 400, date: '2026-06-01', desc: 'أدوات نظافة السلالم' }
+            ],
+            revenues: [
+                { id: 1, source: 'اشتراكات شهرية', amount: 1200, date: '2026-06-03', desc: 'تحصيل اشتراكات يونيو' },
+                { id: 2, source: 'إيجار المحل الأرضي', amount: 1500, date: '2026-06-01', desc: 'مساهمة صيانة دورية' }
+            ],
+            staff: {
+                name: 'عم حنفي محمد',
+                phone: '01122334455',
+                nid: '29012150102345',
+                emergencyName: 'محمود (ابن البواب)',
+                emergencyPhone: '01299887766',
+                salary: 2500
+            }
+        };
+
+        let appData = JSON.parse(localStorage.getItem('borj_sahba_data_v3')) || DEFAULT_DATA;
+
+        function saveToStorage() {
+            localStorage.setItem('borj_sahba_data_v3', JSON.stringify(appData));
+        }
+
+        function showAlert(title, message, isError = false) {
+            document.getElementById('alert-title').innerText = title;
+            document.getElementById('alert-message').innerText = message;
+            const icon = document.getElementById('alert-icon');
+            if(isError) {
+                icon.className = 'w-12 h-12 rounded-full bg-red-500/20 text-red-400 flex items-center justify-center text-xl mx-auto mb-3';
+                icon.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i>';
+            } else {
+                icon.className = 'w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center text-xl mx-auto mb-3';
+                icon.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
+            }
+            openModal('custom-alert-modal');
+        }
+
+        function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+
+        function openAuthModal() {
+            if (appData.currentUser) {
+                appData.currentUser = null;
+                saveToStorage();
+                renderActiveTab();
+                showAlert('تم تسجيل الخروج', 'تم تسجيل خروجك بنجاح من النظام.');
+            } else {
+                openModal('auth-modal');
+            }
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const aptNumInput = document.getElementById('login-apt').value.trim();
+            const phoneInput = document.getElementById('login-phone').value.trim();
+
+            const apt = appData.apartments.find(a => 
+                a.number.trim().toLowerCase() === aptNumInput.toLowerCase() && 
+                a.phone.trim() === phoneInput
+            );
+
+            if (apt) {
+                appData.currentUser = apt;
+                saveToStorage();
+                closeModal('auth-modal');
+                renderActiveTab();
+                showAlert('مرحباً بك', `تم تسجيل الدخول بنجاح لـ (${apt.number}) - المالك: ${apt.owner}`);
+            } else {
+                showAlert('خطأ في البيانات', 'رقم الشقة (مثل: شقة 101) أو رقم هاتف المالك (كلمة المرور) غير مطابق للبيانات المسجلة. تذكر أن المالك فقط يمكنه تسجيل الدخول.', true);
+            }
+        }
+
+        function switchTab(tabName) {
+            appData.activeTab = tabName;
+            saveToStorage();
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                if(btn.getAttribute('data-tab') === tabName) {
+                    btn.classList.add('text-amber-400');
+                    btn.classList.remove('text-slate-400');
+                } else {
+                    btn.classList.remove('text-amber-400');
+                    btn.classList.add('text-slate-400');
+                }
+            });
+            renderActiveTab();
+        }
+
+        function isAdmin() {
+            return appData.currentUser && appData.currentUser.role === 'admin';
+        }
+
+        function renderActiveTab() {
+            const badge = document.getElementById('header-user-badge');
+            const authBtnText = document.getElementById('auth-btn-text');
+            if (appData.currentUser) {
+                badge.innerText = `${appData.currentUser.number} (${isAdmin() ? 'أدمن' : 'مالك'})`;
+                authBtnText.innerText = 'خروج';
+            } else {
+                badge.innerText = 'زائر (غير مسجل)';
+                authBtnText.innerText = 'دخول';
+            }
+
+            const container = document.getElementById('main-content');
+            container.scrollTop = 0;
+
+            switch(appData.activeTab) {
+                case 'home': container.innerHTML = renderHomeHTML(); break;
+                case 'apartments': container.innerHTML = renderApartmentsHTML(); break;
+                case 'announcements': container.innerHTML = renderAnnouncementsHTML(); break;
+                case 'dues': container.innerHTML = renderDuesHTML(); break;
+                case 'finances': container.innerHTML = renderFinancesHTML(); break;
+                case 'staff': container.innerHTML = renderStaffHTML(); break;
+                default: container.innerHTML = renderHomeHTML();
+            }
+            renderNotificationsBadge();
+        }
+
+        function renderNotificationsBadge() {
+            const list = document.getElementById('notifications-list');
+            const allItems = [...appData.announcements];
+            if(isAdmin()) {
+                appData.pendingAnnouncements.forEach(p => allItems.unshift({title: 'إعلان بانتظار الموافقة: ' + p.title, text: p.text, date: p.date}));
+            }
+            list.innerHTML = allItems.map(item => `
+                <div class="p-3 bg-slate-800/80 rounded-xl border border-slate-700/60">
+                    <div class="flex justify-between items-start mb-1">
+                        <span class="font-bold text-xs text-white flex items-center gap-1.5"><i class="fa-solid fa-bullhorn text-amber-500"></i> ${item.title}</span>
+                        <span class="text-[10px] text-slate-400">${item.date}</span>
+                    </div>
+                    <p class="text-[11px] text-slate-300 leading-relaxed">${item.text}</p>
+                </div>
+            `).join('');
+        }
+
+        // --- 1. HOME DASHBOARD ---
+        function renderHomeHTML() {
+            const totalApts = appData.apartments.length;
+            const currentMonthDues = appData.dues[appData.currentMonth] || {};
+            const paidCount = Object.values(currentMonthDues).filter(v => v === 'paid').length;
+            const collectionRate = totalApts > 0 ? Math.round((paidCount / totalApts) * 100) : 0;
+            
+            const totalExpenses = appData.expenses.reduce((a, c) => a + Number(c.amount), 0);
+            const totalRevenues = appData.revenues.reduce((a, c) => a + Number(c.amount), 0);
+            const netBalance = totalRevenues - totalExpenses;
+
+            const unpaidList = appData.apartments.filter(a => (currentMonthDues[a.number] || 'pending') !== 'paid');
+            const latestUrgent = appData.announcements.find(a => a.urgent && a.approved) || appData.announcements[0];
+
+            return `
+                <div class="p-4 space-y-4 animate-fade-in">
+                    ${latestUrgent ? `
+                        <div class="bg-gradient-to-r from-amber-600/20 to-amber-900/40 border border-amber-500/40 rounded-2xl p-4 shadow-lg">
+                            <div class="flex items-center space-x-2 space-x-reverse mb-1.5">
+                                <span class="flex h-2.5 w-2.5 relative">
+                                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                                  <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-500"></span>
+                                </span>
+                                <span class="text-xs font-bold text-amber-400">تنبيه إداري عاجل</span>
+                            </div>
+                            <h3 class="font-bold text-white text-sm mb-1">${latestUrgent.title}</h3>
+                            <p class="text-xs text-slate-300 leading-relaxed">${latestUrgent.text}</p>
+                        </div>
+                    ` : ''}
+
+                    <!-- Financial & Collection Statistics -->
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="bg-slate-800/80 border border-slate-700/60 rounded-2xl p-3.5 flex flex-col justify-between shadow">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-[11px] text-slate-400">تحصيل الاشتراكات</span>
+                                <div class="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs">
+                                    <i class="fa-solid fa-chart-pie"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="text-xl font-black text-white">${collectionRate}%</div>
+                                <div class="text-[10px] text-emerald-400 mt-0.5">${paidCount} من ${totalApts} شقق دافعة</div>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-800/80 border border-slate-700/60 rounded-2xl p-3.5 flex flex-col justify-between shadow">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-[11px] text-slate-400">صافي الخزينة</span>
+                                <div class="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-xs">
+                                    <i class="fa-solid fa-wallet"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="text-xl font-black text-white">${netBalance} <span class="text-[10px] text-slate-400">ج.م</span></div>
+                                <div class="text-[10px] text-slate-400 mt-0.5">إجمالي إيراد - مصاريف</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Detailed Transparency Stats (Visible to All) -->
+                    <div class="bg-slate-800/80 border border-slate-700/60 rounded-2xl p-4 shadow space-y-3">
+                        <h4 class="text-xs font-bold text-amber-400 flex items-center gap-1.5">
+                            <i class="fa-solid fa-eye"></i> الشفافية المالية والاشتراكات المتأخرة
+                        </h4>
+                        <div class="grid grid-cols-2 gap-2 text-xs">
+                            <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-700">
+                                <span class="text-[10px] text-slate-400 block">إجمالي المصاريف المسجلة</span>
+                                <span class="font-bold text-red-400 text-sm">${totalExpenses} ج.م</span>
+                            </div>
+                            <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-700">
+                                <span class="text-[10px] text-slate-400 block">إجمالي الإيرادات المحصلة</span>
+                                <span class="font-bold text-emerald-400 text-sm">${totalRevenues} ج.م</span>
+                            </div>
+                        </div>
+
+                        <div class="pt-2 border-t border-slate-700/60">
+                            <div class="flex justify-between items-center mb-1.5">
+                                <span class="text-[11px] text-slate-300 font-bold">الشقق المتأخرة عن شهر ${appData.currentMonth}:</span>
+                                <button onclick="openUnpaidModal()" class="text-[11px] text-amber-400 hover:underline font-bold flex items-center gap-1 bg-slate-900 px-2.5 py-1 rounded-lg border border-slate-700">
+                                    <i class="fa-solid fa-arrow-up-right-from-square"></i> عرض الكل (${unpaidList.length})
+                                </button>
+                            </div>
+                            <div class="flex flex-wrap gap-1.5">
+                                ${unpaidList.length === 0 ? '<span class="text-[11px] text-emerald-400">جميع الشقق سددت اشتراكاتها!</span>' : unpaidList.slice(0, 4).map(a => `
+                                    <span class="bg-red-500/20 border border-red-500/30 text-red-300 text-[10px] px-2.5 py-1 rounded-lg font-bold">${a.number} (${a.owner})</span>
+                                `).join('')}
+                                ${unpaidList.length > 4 ? `<button onclick="openUnpaidModal()" class="text-[10px] text-amber-400 px-2 py-1 bg-slate-900 rounded-lg border border-slate-700">+ المزيد</button>` : ''}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Admin Quick Broadcast Box -->
+                    ${isAdmin() ? `
+                        <div class="bg-slate-800/90 border border-slate-700/80 rounded-2xl p-4 shadow-md">
+                            <h3 class="text-xs font-bold text-amber-400 mb-2 flex items-center gap-1.5">
+                                <i class="fa-solid fa-paper-plane"></i> إرسال تنبيه أو خبر فوري لكل السكان
+                            </h3>
+                            <form onsubmit="postAdminAnnouncement(event)" class="space-y-2.5">
+                                <input type="text" id="adm-ann-title" placeholder="عنوان التنبيه..." required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500">
+                                <textarea id="adm-ann-text" placeholder="نص التنبيه..." required rows="2" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500"></textarea>
+                                <div class="flex justify-between items-center">
+                                    <label class="flex items-center space-x-2 space-x-reverse text-xs text-slate-300 cursor-pointer">
+                                        <input type="checkbox" id="adm-ann-urgent" class="rounded bg-slate-900 border-slate-700 text-amber-500">
+                                        <span>تنبيه عاجل بالهيدر</span>
+                                    </label>
+                                    <button type="submit" class="bg-amber-600 hover:bg-amber-500 text-white font-bold px-3 py-1.5 rounded-xl text-xs transition">نشر فوري</button>
+                                </div>
+                            </form>
+                        </div>
+                    ` : ''}
+
+                    <!-- Approved Announcements Stream -->
+                    <div class="space-y-2">
+                        <h4 class="text-xs font-bold text-slate-400 px-1">أحدث أخبار وإعلانات العمارة</h4>
+                        ${appData.announcements.filter(a => a.approved).map(item => `
+                            <div class="bg-slate-800/60 border border-slate-700/40 rounded-xl p-3">
+                                <div class="flex justify-between items-center mb-1">
+                                    <span class="font-bold text-xs text-white">${item.title}</span>
+                                    <span class="text-[10px] text-slate-400">${item.date}</span>
+                                </div>
+                                <p class="text-xs text-slate-300 mb-2">${item.text}</p>
+                                <span class="text-[10px] text-amber-400 font-semibold">بواسطة: ${item.author}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function postAdminAnnouncement(e) {
+            e.preventDefault();
+            if(!isAdmin()) return;
+            const title = document.getElementById('adm-ann-title').value;
+            const text = document.getElementById('adm-ann-text').value;
+            const urgent = document.getElementById('adm-ann-urgent').checked;
+            const today = new Date().toISOString().split('T')[0];
+
+            appData.announcements.unshift({
+                id: Date.now(),
+                title, text, date: today, urgent, approved: true, author: 'الإدارة'
+            });
+            saveToStorage();
+            renderActiveTab();
+            showAlert('تم النشر', 'تم نشر التنبيه بنجاح لجميع السكان.');
+        }
+
+        function openUnpaidModal() {
+            const currentMonthDues = appData.dues[appData.currentMonth] || {};
+            const unpaidList = appData.apartments.filter(a => (currentMonthDues[a.number] || 'pending') !== 'paid');
+            
+            document.getElementById('modal-unpaid-month').innerText = appData.currentMonth;
+            const listContainer = document.getElementById('unpaid-modal-list');
+            
+            if(unpaidList.length === 0) {
+                listContainer.innerHTML = '<div class="text-center py-6 text-emerald-400 text-xs font-bold">لا توجد أي شقق متأخرة عن هذا الشهر! ممتاز 👏</div>';
+            } else {
+                listContainer.innerHTML = unpaidList.map(a => `
+                    <div class="p-3 bg-slate-800 rounded-xl border border-slate-700 flex justify-between items-center text-xs">
+                        <div>
+                            <div class="font-bold text-white mb-0.5">${a.number} - المالك: ${a.owner}</div>
+                            <div class="text-[10px] text-slate-400">هاتف المالك: <span dir="ltr">${a.phone}</span> ${a.hasTenant ? `<br><span class="text-amber-300">مستأجر: ${a.tenantName} (${a.tenantPhone})</span>` : ''}</div>
+                        </div>
+                        <span class="bg-red-500/20 text-red-400 text-[10px] px-2.5 py-1 rounded-full font-bold shrink-0">لم يسدد</span>
+                    </div>
+                `).join('');
+            }
+            openModal('unpaid-modal');
+        }
+
+        // --- 2. APARTMENTS & TENANTS ---
+        function renderApartmentsHTML() {
+            return `
+                <div class="p-4 space-y-4 animate-fade-in">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h2 class="font-bold text-base text-white">شئون الشقق والمستأجرين</h2>
+                            <p class="text-xs text-slate-400">إدارة الملاك، صلاحيات الأدمن، والمستأجرين</p>
+                        </div>
+                        ${isAdmin() ? `
+                            <button onclick="openApartmentModal()" class="bg-amber-600 hover:bg-amber-500 text-white font-bold px-3 py-2 rounded-xl text-xs flex items-center gap-1.5 shadow transition">
+                                <i class="fa-solid fa-plus"></i> إضافة شقة
+                            </button>
+                        ` : ''}
+                    </div>
+
+                    <!-- Tenants Summary View for Admin Only -->
+                    ${isAdmin() ? `
+                        <div class="bg-slate-800/80 border border-slate-700/60 rounded-2xl p-4 shadow">
+                            <h3 class="text-xs font-bold text-amber-400 mb-2 flex items-center gap-1.5">
+                                <i class="fa-solid fa-id-card"></i> سجل المستأجرين الخارجيين (للأدمن فقط)
+                            </h3>
+                            <div class="space-y-2">
+                                ${appData.apartments.filter(a => a.hasTenant).length === 0 ? '<div class="text-[11px] text-slate-500">لا يوجد مستأجرين مسجلين حالياً</div>' : appData.apartments.filter(a => a.hasTenant).map(a => `
+                                    <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-700 text-xs flex justify-between items-center">
+                                        <div>
+                                            <span class="font-bold text-white">${a.number} - المستأجر: ${a.tenantName}</span>
+                                            <span class="text-[10px] text-slate-400 block">هاتف المستأجر: ${a.tenantPhone} | (المالك الأصلي: ${a.owner})</span>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+
+                    <div class="space-y-3" id="apartments-list-container">
+                        ${renderApartmentsCards(appData.apartments)}
+                    </div>
+                </div>
+
+                <!-- Apartment Modal -->
+                <div id="apartment-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-sm p-5 shadow-2xl max-h-[85vh] overflow-y-auto">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 id="apt-modal-title" class="text-base font-bold text-white">إضافة شقة جديدة</h3>
+                            <button onclick="closeModal('apartment-modal')" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+                        </div>
+                        <form onsubmit="saveApartment(event)" class="space-y-3">
+                            <input type="hidden" id="apt-edit-id">
+                            <div>
+                                <label class="text-[11px] text-slate-400 mb-1 block">رقم الشقة (اسم المستخدم للدخول)</label>
+                                <input type="text" id="apt-number" placeholder="شقة 104" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="text-[11px] text-slate-400 mb-1 block">اسم مالك الشقة</label>
+                                <input type="text" id="apt-owner" placeholder="الاسم الثلاثي" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="text-[11px] text-slate-400 mb-1 block">رقم هاتف المالك (كلمة المرور لدخول المالك)</label>
+                                <input type="tel" id="apt-phone" placeholder="01012345678" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="text-[11px] text-slate-400 mb-1 block">صلاحية المستخدم (دور الساكن)</label>
+                                <select id="apt-role" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
+                                    <option value="resident">ساكن عادي</option>
+                                    <option value="admin">أدمن (مسؤول)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="text-[11px] text-slate-400 mb-1 block">بيانات السيارة</label>
+                                <input type="text" id="apt-car" placeholder="رقم اللوحة والموديل" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
+                            </div>
+                            <div class="pt-2 border-t border-slate-800">
+                                <label class="flex items-center space-x-2 space-x-reverse text-xs text-slate-300 cursor-pointer mb-2">
+                                    <input type="checkbox" id="apt-has-tenant" onchange="toggleTenantFields()" class="rounded bg-slate-800 border-slate-700 text-amber-500">
+                                    <span>الشقة مؤجرة لمستأجر خارجي؟</span>
+                                </label>
+                                <div id="tenant-section" class="space-y-2 hidden bg-slate-800/50 p-3 rounded-xl border border-slate-700">
+                                    <div>
+                                        <label class="text-[10px] text-slate-400 mb-1 block">اسم المستأجر</label>
+                                        <input type="text" id="apt-tenant-name" placeholder="اسم المستأجر" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
+                                    </div>
+                                    <div>
+                                        <label class="text-[10px] text-slate-400 mb-1 block">هاتف المستأجر</label>
+                                        <input type="tel" id="apt-tenant-phone" placeholder="010..." class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" class="w-full py-2.5 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-xl text-xs transition shadow-md">حفظ البيانات وإرسال واتساب للمالك</button>
+                        </form>
+                    </div>
+                </div>
+            `;
+        }
+
+        function toggleTenantFields() {
+            const checked = document.getElementById('apt-has-tenant').checked;
+            const sec = document.getElementById('tenant-section');
+            if(checked) sec.classList.remove('hidden');
+            else sec.classList.add('hidden');
+        }
+
+        function renderApartmentsCards(list) {
+            return list.map(apt => `
+                <div class="bg-slate-800/80 border border-slate-700/70 rounded-2xl p-4 shadow">
+                    <div class="flex justify-between items-start mb-2">
+                        <div class="flex items-center space-x-2 space-x-reverse">
+                            <div class="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center font-bold text-xs">
+                                <i class="fa-solid fa-door-open"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-sm text-white">${apt.number}</h3>
+                                <span class="text-[11px] text-amber-400 font-medium">المالك: ${apt.owner}</span>
+                            </div>
+                        </div>
+                        <span class="bg-slate-900 border border-slate-700 text-slate-300 text-[10px] px-2.5 py-1 rounded-lg">
+                            ${apt.role === 'admin' ? 'أدمن' : 'مالك'}
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2 mt-3 pt-3 border-t border-slate-700/60 text-xs text-slate-300">
+                        <div><i class="fa-solid fa-phone ml-1 text-slate-400"></i> هاتف المالك: <span dir="ltr">${apt.phone}</span></div>
+                        <div><i class="fa-solid fa-car ml-1 text-slate-400"></i> ${apt.car}</div>
+                    </div>
+
+                    ${apt.hasTenant ? `
+                        <div class="mt-2 pt-2 border-t border-slate-700/40 text-[11px] text-amber-300">
+                            <i class="fa-solid fa-user-shield ml-1"></i> مستأجر خارجي: ${apt.tenantName} (${apt.tenantPhone})
+                        </div>
+                    ` : ''}
+
+                    ${isAdmin() ? `
+                        <div class="flex justify-end space-x-2 space-x-reverse mt-3 pt-2 border-t border-slate-700/40">
+                            <button onclick="openApartmentModal(${apt.id})" class="text-xs text-amber-400 px-2.5 py-1 bg-slate-900 rounded-lg border border-slate-700"><i class="fa-solid fa-pen ml-1"></i>تعديل الرول / البيانات</button>
+                            <button onclick="deleteApartment(${apt.id})" class="text-xs text-red-400 px-2.5 py-1 bg-slate-900 rounded-lg border border-slate-700"><i class="fa-solid fa-trash ml-1"></i>حذف</button>
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('');
+        }
+
+        function openApartmentModal(aptId = null) {
+            if(!isAdmin()) return;
+            document.getElementById('apt-edit-id').value = '';
+            document.getElementById('apt-number').value = '';
+            document.getElementById('apt-owner').value = '';
+            document.getElementById('apt-phone').value = '';
+            document.getElementById('apt-role').value = 'resident';
+            document.getElementById('apt-car').value = '';
+            document.getElementById('apt-has-tenant').checked = false;
+            document.getElementById('tenant-section').classList.add('hidden');
+            document.getElementById('apt-tenant-name').value = '';
+            document.getElementById('apt-tenant-phone').value = '';
+            document.getElementById('apt-modal-title').innerText = 'إضافة شقة جديدة';
+
+            if(aptId) {
+                const apt = appData.apartments.find(a => a.id === aptId);
+                if(apt) {
+                    document.getElementById('apt-edit-id').value = apt.id;
+                    document.getElementById('apt-number').value = apt.number;
+                    document.getElementById('apt-owner').value = apt.owner;
+                    document.getElementById('apt-phone').value = apt.phone;
+                    document.getElementById('apt-role').value = apt.role || 'resident';
+                    document.getElementById('apt-car').value = apt.car;
+                    document.getElementById('apt-has-tenant').checked = apt.hasTenant || false;
+                    if(apt.hasTenant) document.getElementById('tenant-section').classList.remove('hidden');
+                    document.getElementById('apt-tenant-name').value = apt.tenantName || '';
+                    document.getElementById('apt-tenant-phone').value = apt.tenantPhone || '';
+                    document.getElementById('apt-modal-title').innerText = 'تعديل الشقة وصلاحية الأدمن';
+                }
+            }
+            openModal('apartment-modal');
+        }
+
+        function saveApartment(e) {
+            e.preventDefault();
+            const editId = document.getElementById('apt-edit-id').value;
+            const number = document.getElementById('apt-number').value;
+            const owner = document.getElementById('apt-owner').value;
+            const phone = document.getElementById('apt-phone').value;
+            const role = document.getElementById('apt-role').value;
+            const car = document.getElementById('apt-car').value;
+            const hasTenant = document.getElementById('apt-has-tenant').checked;
+            const tenantName = document.getElementById('apt-tenant-name').value;
+            const tenantPhone = document.getElementById('apt-tenant-phone').value;
+
+            if(editId) {
+                const idx = appData.apartments.findIndex(a => a.id == editId);
+                if(idx !== -1) {
+                    appData.apartments[idx] = { id: Number(editId), number, owner, phone, role, car, count: 1, hasTenant, tenantName, tenantPhone };
+                }
+            } else {
+                appData.apartments.push({ id: Date.now(), number, owner, phone, role, car, count: 1, hasTenant, tenantName, tenantPhone });
+                // WhatsApp notification
+                const message = `مرحباً أ/ ${owner}، تم تسجيل شقتك (${number}) في نظام برج الصحبة. اسم المستخدم للدخول: ${number} وكلمة المرور: ${phone}`;
+                const waUrl = `https://wa.me/${phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(message)}`;
+                window.open(waUrl, '_blank');
+            }
+
+            saveToStorage();
+            closeModal('apartment-modal');
+            renderActiveTab();
+            showAlert('تم الحفظ', 'تم حفظ بيانات الشقة وصلاحيات الأدمن بنجاح.');
+        }
+
+        function deleteApartment(id) {
+            if(!isAdmin()) return;
+            appData.apartments = appData.apartments.filter(a => a.id !== id);
+            saveToStorage();
+            renderActiveTab();
+            showAlert('تم الحذف', 'تم حذف الشقة بنجاح.');
+        }
+
+        // --- 3. RESIDENT & ADMIN ANNOUNCEMENTS ---
+        function renderAnnouncementsHTML() {
+            return `
+                <div class="p-4 space-y-4 animate-fade-in">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h2 class="font-bold text-base text-white">لوحة الإعلانات العامة</h2>
+                            <p class="text-xs text-slate-400">إعلانات السكان تتطلب موافقة الأدمن أولاً</p>
+                        </div>
+                        <button onclick="openAddAnnouncementModal()" class="bg-amber-600 hover:bg-amber-500 text-white font-bold px-3 py-2 rounded-xl text-xs flex items-center gap-1.5 shadow transition">
+                            <i class="fa-solid fa-plus"></i> أضف إعلانك
+                        </button>
+                    </div>
+
+                    ${isAdmin() && appData.pendingAnnouncements.length > 0 ? `
+                        <div class="bg-amber-500/10 border border-amber-500/30 rounded-2xl p-4 space-y-3">
+                            <h3 class="font-bold text-xs text-amber-400 flex items-center gap-1.5">
+                                <i class="fa-solid fa-triangle-exclamation"></i> إعلانات بانتظار موافقة الأدمن (${appData.pendingAnnouncements.length})
+                            </h3>
+                            ${appData.pendingAnnouncements.map(p => `
+                                <div class="bg-slate-900 p-3 rounded-xl border border-slate-700 text-xs space-y-2">
+                                    <div class="flex justify-between font-bold text-white">
+                                        <span>${p.title} (${p.author})</span>
+                                        <span>${p.date}</span>
+                                    </div>
+                                    <p class="text-slate-300">${p.text}</p>
+                                    ${p.image ? `<img src="${p.image}" class="w-full h-32 object-cover rounded-lg">` : ''}
+                                    <div class="flex justify-end space-x-2 space-x-reverse">
+                                        <button onclick="approveAnnouncement(${p.id})" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded-lg font-bold">موافقة ونشر</button>
+                                        <button onclick="rejectAnnouncement(${p.id})" class="bg-red-600 hover:bg-red-500 text-white px-3 py-1.5 rounded-lg font-bold">رفض وحذف</button>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    ` : ''}
+
+                    <!-- Published Announcements -->
+                    <div class="space-y-3">
+                        ${appData.announcements.filter(a => a.approved).map(a => `
+                            <div class="bg-slate-800/80 border border-slate-700/70 rounded-2xl p-4 space-y-2 shadow">
+                                <div class="flex justify-between items-center">
+                                    <h3 class="font-bold text-sm text-white flex items-center gap-1.5"><i class="fa-solid fa-bullhorn text-amber-500"></i> ${a.title}</h3>
+                                    <span class="text-[10px] text-slate-400">${a.date}</span>
+                                </div>
+                                <p class="text-xs text-slate-300">${a.text}</p>
+                                ${a.image ? `<img src="${a.image}" class="w-full h-40 object-cover rounded-xl mt-2">` : ''}
+                                <div class="flex justify-between items-center pt-2 border-t border-slate-700/50 text-[10px] text-amber-400 font-semibold">
+                                    <span>بواسطة: ${a.author}</span>
+                                    ${isAdmin() ? `<button onclick="deletePublishedAnnouncement(${a.id})" class="text-red-400 hover:text-red-300"><i class="fa-solid fa-trash ml-1"></i>حذف</button>` : ''}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <!-- Add Announcement Modal -->
+                <div id="announcement-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-sm p-5 shadow-2xl">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-base font-bold text-white">إضافة إعلان جديد للمراجعة</h3>
+                            <button onclick="closeModal('announcement-modal')" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+                        </div>
+                        <form onsubmit="submitResidentAnnouncement(event)" class="space-y-3">
+                            <div>
+                                <label class="text-[11px] text-slate-400 mb-1 block">عنوان الإعلان</label>
+                                <input type="text" id="res-ann-title" placeholder="مثال: مطلوب شقة للبيع أو إيجار..." required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="text-[11px] text-slate-400 mb-1 block">تفاصيل الإعلان</label>
+                                <textarea id="res-ann-text" rows="3" placeholder="تفاصيل الإعلان..." required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none"></textarea>
+                            </div>
+                            <div>
+                                <label class="text-[11px] text-slate-400 mb-1 block">رابط صورة مرفقة (اختياري)</label>
+                                <input type="url" id="res-ann-img" placeholder="https://..." class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
+                            </div>
+                            <button type="submit" class="w-full py-2.5 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-xl text-xs transition shadow-md">إرسال للأدمن للموافقة والنشر</button>
+                        </form>
+                    </div>
+                </div>
+            `;
+        }
+
+        function openAddAnnouncementModal() {
+            if(!appData.currentUser) {
+                showAlert('يتطلب تسجيل الدخول', 'يجب تسجيل دخول شقتك أولاً لكي تتمكن من نشر إعلان.', true);
+                openAuthModal();
+                return;
+            }
+            openModal('announcement-modal');
+        }
+
+        function submitResidentAnnouncement(e) {
+            e.preventDefault();
+            const title = document.getElementById('res-ann-title').value;
+            const text = document.getElementById('res-ann-text').value;
+            const image = document.getElementById('res-ann-img').value;
+            const today = new Date().toISOString().split('T')[0];
+
+            appData.pendingAnnouncements.push({
+                id: Date.now(),
+                title, text, image, date: today, author: appData.currentUser.number
+            });
+            saveToStorage();
+            closeModal('announcement-modal');
+            renderActiveTab();
+            showAlert('تم الإرسال بنجاح', 'تم إرسال إعلانك للأدمن للمراجعة وسيتم نشره فور الموافقة عليه.');
+        }
+
+        function approveAnnouncement(id) {
+            if(!isAdmin()) return;
+            const idx = appData.pendingAnnouncements.findIndex(p => p.id === id);
+            if(idx !== -1) {
+                const item = appData.pendingAnnouncements[idx];
+                item.approved = true;
+                appData.announcements.unshift(item);
+                appData.pendingAnnouncements.splice(idx, 1);
+                saveToStorage();
+                renderActiveTab();
+                showAlert('تم النشر', 'تمت الموافقة على الإعلان ونشره بنجاح.');
+            }
+        }
+
+        function rejectAnnouncement(id) {
+            if(!isAdmin()) return;
+            appData.pendingAnnouncements = appData.pendingAnnouncements.filter(p => p.id !== id);
+            saveToStorage();
+            renderActiveTab();
+            showAlert('تم الرفض', 'تم رفض وحذف الإعلان.');
+        }
+
+        function deletePublishedAnnouncement(id) {
+            if(!isAdmin()) return;
+            appData.announcements = appData.announcements.filter(a => a.id !== id);
+            saveToStorage();
+            renderActiveTab();
+            showAlert('تم الحذف', 'تم حذف الإعلان.');
+        }
+
+        // --- 4. MONTHLY DUES & EMERGENCY ASSESSMENTS ---
+        function renderDuesHTML() {
+            const currentMonth = appData.currentMonth;
+            if(!appData.dues[currentMonth]) {
+                appData.dues[currentMonth] = {};
+                appData.apartments.forEach(a => appData.dues[currentMonth][a.number] = 'pending');
+            }
+            const monthDues = appData.dues[currentMonth];
+
+            return `
+                <div class="p-4 space-y-4 animate-fade-in">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h2 class="font-bold text-base text-white">الاشتراكات والرسوم الطارئة</h2>
+                            <p class="text-xs text-slate-400">متابعة السداد الشهري والالتزامات الإضافية</p>
+                        </div>
+                        <select onchange="changeMonth(this.value)" class="bg-slate-800 border border-slate-700 text-xs text-amber-400 font-bold rounded-xl px-3 py-2 focus:outline-none">
+                            <option value="2026-06" ${currentMonth === '2026-06' ? 'selected' : ''}>يونيو 2026</option>
+                            <option value="2026-05" ${currentMonth === '2026-05' ? 'selected' : ''}>مايو 2026</option>
+                        </select>
+                    </div>
+
+                    <!-- Admin Dues Configuration Section -->
+                    ${isAdmin() ? `
+                        <div class="bg-slate-800/90 border border-slate-700 rounded-2xl p-4 shadow space-y-3">
+                            <h3 class="font-bold text-xs text-amber-400 flex items-center gap-1.5"><i class="fa-solid fa-gear"></i> لوحة تحكم الأدمن (قيمة الاشتراكات والطارئة)</h3>
+                            <div class="flex gap-2 items-center">
+                                <input type="number" id="monthly-dues-val" value="${appData.duesSettings.monthlyAmount}" class="bg-slate-900 border border-slate-700 rounded-xl px-3 py-1.5 text-xs text-white w-32">
+                                <button onclick="updateMonthlyDuesAmount()" class="bg-amber-600 hover:bg-amber-500 text-white px-3 py-1.5 rounded-xl text-xs font-bold">تعديل قيمة الاشتراك الشهري</button>
+                            </div>
+                            <div class="pt-2 border-t border-slate-700">
+                                <button onclick="openEmergencyAssessmentModal()" class="w-full py-2 bg-red-600 hover:bg-red-500 text-white font-bold rounded-xl text-xs shadow">
+                                    <i class="fa-solid fa-triangle-exclamation ml-1"></i> إضافة بند إيراد طارئ ومطالبة كل شقة بالسداد
+                                </button>
+                            </div>
+                        </div>
+                    ` : ''}
+
+                    <!-- Emergency Assessments Active List -->
+                    ${appData.emergencyAssessments.length > 0 ? `
+                        <div class="bg-slate-800/80 border border-red-500/30 rounded-2xl p-4 space-y-3">
+                            <h3 class="font-bold text-xs text-red-400"><i class="fa-solid fa-bolt ml-1"></i> التزامات طارئة مطلوبة من الشقق</h3>
+                            ${appData.emergencyAssessments.map(em => `
+                                <div class="bg-slate-900 p-3 rounded-xl border border-slate-700 text-xs space-y-2">
+                                    <div class="flex justify-between font-bold text-white">
+                                        <span>${em.title} (${em.amountPerUnit} ج.م لكل شقة)</span>
+                                        <span>${em.date}</span>
+                                    </div>
+                                    <div class="flex flex-wrap gap-1 pt-1">
+                                        ${appData.apartments.map(a => `
+                                            <span class="text-[10px] px-2 py-0.5 rounded font-bold ${(em.status[a.number] === 'paid') ? 'bg-emerald-500/20 text-emerald-400' : 'bg-red-500/20 text-red-400'}">
+                                                ${a.number}: ${em.status[a.number] === 'paid' ? 'مدفوع' : 'مطلوب'}
+                                                ${isAdmin() ? `<button onclick="toggleEmergencyStatus('${em.id}', '${a.number}')" class="mr-1 text-white underline">تغيير</button>` : ''}
+                                            </span>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    ` : ''}
+
+                    <!-- Monthly Dues List -->
+                    <div class="space-y-3">
+                        ${appData.apartments.map(apt => {
+                            const status = monthDues[apt.number] || 'pending';
+                            let statusBadge = status === 'paid' ? '<span class="bg-emerald-500/20 text-emerald-400 text-[10px] px-2.5 py-1 rounded-full font-bold">تم السداد</span>' : '<span class="bg-red-500/20 text-red-400 text-[10px] px-2.5 py-1 rounded-full font-bold">متأخر</span>';
+
+                            return `
+                                <div class="bg-slate-800/80 border border-slate-700/70 rounded-2xl p-3.5 flex justify-between items-center">
+                                    <div>
+                                        <h4 class="font-bold text-sm text-white">${apt.number}</h4>
+                                        <span class="text-[11px] text-slate-400">المالك: ${apt.owner}</span>
+                                        <div class="mt-1">${statusBadge}</div>
+                                    </div>
+                                    <div class="flex flex-col gap-1.5 items-end">
+                                        ${isAdmin() ? `
+                                            <div class="flex gap-1">
+                                                <button onclick="setDueStatus('${apt.number}', 'paid')" class="px-2 py-1 rounded bg-emerald-600/30 text-emerald-300 text-[10px] font-bold">مدفوع</button>
+                                                <button onclick="setDueStatus('${apt.number}', 'pending')" class="px-2 py-1 rounded bg-red-600/30 text-red-300 text-[10px] font-bold">متأخر</button>
+                                            </div>
+                                            <button onclick="sendWhatsAppReminder('${apt.owner}', '${apt.phone}', '${apt.number}')" class="bg-emerald-600 text-white px-2.5 py-1 rounded text-[10px] font-bold flex items-center gap-1 shadow">
+                                                <i class="fa-brands fa-whatsapp"></i> تذكير واتساب
+                                            </button>
+                                        ` : `
+                                            <span class="text-[11px] text-amber-400 font-bold">${appData.duesSettings.monthlyAmount} ج.م</span>
+                                        `}
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+
+                <!-- Emergency Assessment Modal -->
+                <div id="emergency-assessment-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-sm p-5 shadow-2xl">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-base font-bold text-white">إضافة إيراد طارئ لكل الشقق</h3>
+                            <button onclick="closeModal('emergency-assessment-modal')" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+                        </div>
+                        <form onsubmit="saveEmergencyAssessment(event)" class="space-y-3">
+                            <div>
+                                <label class="text-[11px] text-slate-400 mb-1 block">بند المصروف/الإيراد الطارئ</label>
+                                <input type="text" id="em-title" placeholder="مثل: تصليح باب العمارة الرئيسي" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="text-[11px] text-slate-400 mb-1 block">المطلوب من كل شقة (ج.م)</label>
+                                <input type="number" id="em-amount" min="1" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
+                            </div>
+                            <button type="submit" class="w-full py-2.5 bg-red-600 hover:bg-red-500 text-white font-bold rounded-xl text-xs transition shadow-md">إضافة وتوزيع المطالبة</button>
+                        </form>
+                    </div>
+                </div>
+            `;
+        }
+
+        function changeMonth(val) {
+            appData.currentMonth = val;
+            if(!appData.dues[val]) {
+                appData.dues[val] = {};
+                appData.apartments.forEach(a => appData.dues[val][a.number] = 'pending');
+            }
+            saveToStorage();
+            renderActiveTab();
+        }
+
+        function updateMonthlyDuesAmount() {
+            if(!isAdmin()) return;
+            const val = Number(document.getElementById('monthly-dues-val').value);
+            appData.duesSettings.monthlyAmount = val;
+            saveToStorage();
+            showAlert('تم التعديل', 'تم تحديث قيمة الاشتراك الشهري بنجاح.');
+        }
+
+        function setDueStatus(aptNumber, status) {
+            if(!isAdmin()) return;
+            appData.dues[appData.currentMonth][aptNumber] = status;
+            saveToStorage();
+            renderActiveTab();
+        }
+
+        function openEmergencyAssessmentModal() {
+            if(!isAdmin()) return;
+            openModal('emergency-assessment-modal');
+        }
+
+        function saveEmergencyAssessment(e) {
+            e.preventDefault();
+            const title = document.getElementById('em-title').value;
+            const amountPerUnit = Number(document.getElementById('em-amount').value);
+            const statusMap = {};
+            appData.apartments.forEach(a => statusMap[a.number] = 'pending');
+
+            appData.emergencyAssessments.push({
+                id: Date.now(),
+                title, amountPerUnit, date: new Date().toISOString().split('T')[0], status: statusMap
+            });
+            saveToStorage();
+            closeModal('emergency-assessment-modal');
+            renderActiveTab();
+            showAlert('تم بنجاح', 'تم إضافة البند الطارئ ومطالبة كافة الشقق به.');
+        }
+
+        function toggleEmergencyStatus(emId, aptNum) {
+            if(!isAdmin()) return;
+            const em = appData.emergencyAssessments.find(x => x.id == emId);
+            if(em) {
+                em.status[aptNum] = em.status[aptNum] === 'paid' ? 'pending' : 'paid';
+                saveToStorage();
+                renderActiveTab();
+            }
+        }
+
+        function sendWhatsAppReminder(owner, phone, aptNum) {
+            const msg = `مرحباً أ/ ${owner} (${aptNum})، نذكركم بسداد الاشتراك الشهري لبرج الصحبة بقيمة ${appData.duesSettings.monthlyAmount} ج.م. شكراً لتعاونكم.`;
+            window.open(`https://wa.me/${phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+        // --- 5. FINANCES ---
+        function renderFinancesHTML() {
+            const totalExp = appData.expenses.reduce((a, c) => a + Number(c.amount), 0);
+            const totalRev = appData.revenues.reduce((a, c) => a + Number(c.amount), 0);
+
+            return `
+                <div class="p-4 space-y-4 animate-fade-in">
+                    <div>
+                        <h2 class="font-bold text-base text-white">المالية والحسابات الشفافة</h2>
+                        <p class="text-xs text-slate-400">جميع المصاريف والإيرادات معروضة لكل السكان</p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="bg-slate-800/80 border border-slate-700/60 rounded-2xl p-3.5">
+                            <span class="text-[11px] text-slate-400 block mb-1">إجمالي الإيرادات</span>
+                            <div class="text-lg font-black text-emerald-400">${totalRev} <span class="text-[10px]">ج.م</span></div>
+                        </div>
+                        <div class="bg-slate-800/80 border border-slate-700/60 rounded-2xl p-3.5">
+                            <span class="text-[11px] text-slate-400 block mb-1">إجمالي المصاريف</span>
+                            <div class="text-lg font-black text-red-400">${totalExp} <span class="text-[10px]">ج.م</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Expenses Section -->
+                    <div class="bg-slate-800/80 border border-slate-700/70 rounded-2xl p-4 shadow space-y-3">
+                        <div class="flex justify-between items-center">
+                            <h3 class="font-bold text-sm text-white flex items-center gap-1.5"><i class="fa-solid fa-money-bill-transfer text-red-400"></i> المصاريف وبنود الصيانة</h3>
+                            ${isAdmin() ? `<button onclick="openExpenseModal()" class="bg-red-600 text-white px-2.5 py-1.5 rounded-xl text-xs font-bold"><i class="fa-solid fa-plus"></i> إضافة مصروف</button>` : ''}
+                        </div>
+                        <div class="space-y-2">
+                            ${appData.expenses.map(exp => `
+                                <div class="bg-slate-900 border border-slate-700/60 rounded-xl p-3 flex justify-between items-center text-xs">
+                                    <div>
+                                        <div class="flex gap-2 font-bold text-white mb-1">
+                                            <span>${exp.band}</span>
+                                            <span class="text-red-400">${exp.amount} ج.م</span>
+                                        </div>
+                                        <p class="text-[11px] text-slate-300">${exp.desc}</p>
+                                        <span class="text-[10px] text-slate-500">${exp.date}</span>
+                                    </div>
+                                    ${isAdmin() ? `<button onclick="deleteExpense(${exp.id})" class="text-red-400 p-1"><i class="fa-solid fa-trash"></i></button>` : ''}
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <!-- Revenues Section -->
+                    <div class="bg-slate-800/80 border border-slate-700/70 rounded-2xl p-4 shadow space-y-3">
+                        <div class="flex justify-between items-center">
+                            <h3 class="font-bold text-sm text-white flex items-center gap-1.5"><i class="fa-solid fa-vault text-emerald-400"></i> الإيرادات العامة</h3>
+                            ${isAdmin() ? `<button onclick="openRevenueModal()" class="bg-emerald-600 text-white px-2.5 py-1.5 rounded-xl text-xs font-bold"><i class="fa-solid fa-plus"></i> إضافة إيراد</button>` : ''}
+                        </div>
+                        <div class="space-y-2">
+                            ${appData.revenues.map(rev => `
+                                <div class="bg-slate-900 border border-slate-700/60 rounded-xl p-3 flex justify-between items-center text-xs">
+                                    <div>
+                                        <div class="flex gap-2 font-bold text-white mb-1">
+                                            <span>${rev.source}</span>
+                                            <span class="text-emerald-400">+${rev.amount} ج.م</span>
+                                        </div>
+                                        <p class="text-[11px] text-slate-300">${rev.desc}</p>
+                                        <span class="text-[10px] text-slate-500">${rev.date}</span>
+                                    </div>
+                                    ${isAdmin() ? `<button onclick="deleteRevenue(${rev.id})" class="text-red-400 p-1"><i class="fa-solid fa-trash"></i></button>` : ''}
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Expense Modal -->
+                <div id="expense-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-sm p-5 shadow-2xl">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-base font-bold text-white">إضافة مصروف جديد</h3>
+                            <button onclick="closeModal('expense-modal')" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+                        </div>
+                        <form onsubmit="saveExpense(event)" class="space-y-3">
+                            <div>
+                                <label class="text-[11px] text-slate-400 mb-1 block">بند المصروف</label>
+                                <select id="exp-band" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white">
+                                    <option value="صيانة المصعد">صيانة المصعد</option>
+                                    <option value="نظافة">نظافة</option>
+                                    <option value="كهرباء سلم">كهرباء سلم</option>
+                                    <option value="إصلاحات طارئة">إصلاحات طارئة</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="text-[11px] text-slate-400 mb-1 block">المبلغ (ج.م)</label>
+                                <input type="number" id="exp-amount" min="1" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white">
+                            </div>
+                            <div>
+                                <label class="text-[11px] text-slate-400 mb-1 block">الوصف</label>
+                                <textarea id="exp-desc" rows="2" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white"></textarea>
+                            </div>
+                            <button type="submit" class="w-full py-2.5 bg-red-600 text-white font-bold rounded-xl text-xs">حفظ المصروف</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Revenue Modal -->
+                <div id="revenue-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-sm p-5 shadow-2xl">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-base font-bold text-white">إضافة إيراد جديد</h3>
+                            <button onclick="closeModal('revenue-modal')" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+                        </div>
+                        <form onsubmit="saveRevenue(event)" class="space-y-3">
+                            <div>
+                                <label class="text-[11px] text-slate-400 mb-1 block">مصدر الإيراد</label>
+                                <input type="text" id="rev-source" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white">
+                            </div>
+                            <div>
+                                <label class="text-[11px] text-slate-400 mb-1 block">المبلغ (ج.م)</label>
+                                <input type="number" id="rev-amount" min="1" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white">
+                            </div>
+                            <div>
+                                <label class="text-[11px] text-slate-400 mb-1 block">الوصف</label>
+                                <textarea id="rev-desc" rows="2" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white"></textarea>
+                            </div>
+                            <button type="submit" class="w-full py-2.5 bg-emerald-600 text-white font-bold rounded-xl text-xs">حفظ الإيراد</button>
+                        </form>
+                    </div>
+                </div>
+            `;
+        }
+
+        function openExpenseModal() { openModal('expense-modal'); }
+        function saveExpense(e) {
+            e.preventDefault();
+            if(!isAdmin()) return;
+            appData.expenses.unshift({
+                id: Date.now(),
+                band: document.getElementById('exp-band').value,
+                amount: Number(document.getElementById('exp-amount').value),
+                date: new Date().toISOString().split('T')[0],
+                desc: document.getElementById('exp-desc').value
+            });
+            saveToStorage();
+            closeModal('expense-modal');
+            renderActiveTab();
+            showAlert('تم الحفظ', 'تم إضافة المصروف بنجاح.');
+        }
+        function deleteExpense(id) {
+            if(!isAdmin()) return;
+            appData.expenses = appData.expenses.filter(e => e.id !== id);
+            saveToStorage();
+            renderActiveTab();
+        }
+
+        function openRevenueModal() { openModal('revenue-modal'); }
+        function saveRevenue(e) {
+            e.preventDefault();
+            if(!isAdmin()) return;
+            appData.revenues.unshift({
+                id: Date.now(),
+                source: document.getElementById('rev-source').value,
+                amount: Number(document.getElementById('rev-amount').value),
+                date: new Date().toISOString().split('T')[0],
+                desc: document.getElementById('rev-desc').value
+            });
+            saveToStorage();
+            closeModal('revenue-modal');
+            renderActiveTab();
+            showAlert('تم الحفظ', 'تم إضافة الإيراد بنجاح.');
+        }
+        function deleteRevenue(id) {
+            if(!isAdmin()) return;
+            appData.revenues = appData.revenues.filter(r => r.id !== id);
+            saveToStorage();
+            renderActiveTab();
+        }
+
+        // --- 6. STAFF (DOORKEEPER) ---
+        function renderStaffHTML() {
+            const staff = appData.staff;
+            return `
+                <div class="p-4 space-y-4 animate-fade-in">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h2 class="font-bold text-base text-white">بيانات بواب العمارة</h2>
+                            <p class="text-xs text-slate-400">معلومات الاتصال والطوارئ</p>
+                        </div>
+                        ${isAdmin() ? `<button onclick="openStaffModal()" class="bg-amber-600 text-white px-3 py-2 rounded-xl text-xs font-bold"><i class="fa-solid fa-pen"></i> تعديل</button>` : ''}
+                    </div>
+
+                    <div class="bg-slate-800/90 border border-slate-700 rounded-2xl p-5 shadow-xl space-y-3">
+                        <div class="flex items-center space-x-3 space-x-reverse pb-3 border-b border-slate-700">
+                            <div class="w-14 h-14 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-2xl font-bold"><i class="fa-solid fa-user-tie"></i></div>
+                            <div>
+                                <h3 class="font-bold text-lg text-white">${staff.name}</h3>
+                                <span class="text-xs text-amber-400">مسؤول أمن ونظافة برج الصحبة</span>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2 text-xs">
+                            <div class="flex justify-between bg-slate-900 p-2.5 rounded-xl border border-slate-700">
+                                <span class="text-slate-400">رقم الهاتف</span>
+                                <span dir="ltr" class="font-bold text-white">${staff.phone}</span>
+                            </div>
+                            <div class="flex justify-between bg-slate-900 p-2.5 rounded-xl border border-slate-700">
+                                <span class="text-slate-400">رقم البطاقة</span>
+                                <span dir="ltr" class="font-bold text-white">${staff.nid}</span>
+                            </div>
+                        </div>
+
+                        <div class="pt-2 border-t border-slate-700">
+                            <h4 class="font-bold text-xs text-red-400 mb-2"><i class="fa-solid fa-triangle-exclamation"></i> طوارئ قريب البواب</h4>
+                            <div class="bg-red-500/10 border border-red-500/20 rounded-xl p-3 flex justify-between items-center text-xs">
+                                <div>
+                                    <div class="font-bold text-white">${staff.emergencyName}</div>
+                                </div>
+                                <a href="tel:${staff.emergencyPhone}" class="bg-red-600 text-white px-3 py-1.5 rounded-lg font-bold" dir="ltr"><i class="fa-solid fa-phone"></i> ${staff.emergencyPhone}</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Staff Edit Modal -->
+                <div id="staff-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-sm p-5 shadow-2xl">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-base font-bold text-white">تعديل بيانات البواب</h3>
+                            <button onclick="closeModal('staff-modal')" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+                        </div>
+                        <form onsubmit="saveStaff(event)" class="space-y-3">
+                            <input type="text" id="staff-name" placeholder="اسم البواب" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white">
+                            <input type="tel" id="staff-phone" placeholder="هاتف البواب" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white">
+                            <input type="text" id="staff-nid" placeholder="الرقم القومي" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white">
+                            <input type="text" id="staff-emerg-name" placeholder="اسم قريب البواب للطوارئ" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white">
+                            <input type="tel" id="staff-emerg-phone" placeholder="هاتف قريب البواب" required class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white">
+                            <button type="submit" class="w-full py-2.5 bg-amber-600 text-white font-bold rounded-xl text-xs">حفظ</button>
+                        </form>
+                    </div>
+                </div>
+            `;
+        }
+
+        function openStaffModal() {
+            if(!isAdmin()) return;
+            document.getElementById('staff-name').value = appData.staff.name;
+            document.getElementById('staff-phone').value = appData.staff.phone;
+            document.getElementById('staff-nid').value = appData.staff.nid;
+            document.getElementById('staff-emerg-name').value = appData.staff.emergencyName;
+            document.getElementById('staff-emerg-phone').value = appData.staff.emergencyPhone;
+            openModal('staff-modal');
+        }
+
+        function saveStaff(e) {
+            e.preventDefault();
+            if(!isAdmin()) return;
+            appData.staff = {
+                name: document.getElementById('staff-name').value,
+                phone: document.getElementById('staff-phone').value,
+                nid: document.getElementById('staff-nid').value,
+                emergencyName: document.getElementById('staff-emerg-name').value,
+                emergencyPhone: document.getElementById('staff-emerg-phone').value,
+                salary: appData.staff.salary
+            };
+            saveToStorage();
+            closeModal('staff-modal');
+            renderActiveTab();
+            showAlert('تم التحديث', 'تم تحديث بيانات البواب بنجاح.');
+        }
+
+        window.onload = function() {
+            switchTab(appData.activeTab);
+        };
+    </script>
+</body>
+</html>
